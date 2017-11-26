@@ -1,0 +1,709 @@
+Terminais sem uso na gramática
+
+   TK_MENOR_QUE
+   TK_MAIOR_QUE
+   TK_IGUAL
+   TK_DIFERENTE
+   TK_MENOR_IGUAL
+   TK_CAST_DO_INT
+   TK_CAST_DO_FLOAT
+   TK_FIM
+   TK_ERROR
+
+
+Estado 21 conflitos: 1 de deslocamento/redução
+Estado 42 conflitos: 3 de deslocamento/redução
+Estado 43 conflitos: 1 de deslocamento/redução
+
+
+Gramática
+
+    0 $accept: S $end
+
+    1 S: TK_TIPO_INT TK_MAIN '(' ')' BLOCO
+
+    2 BLOCO: '{' COMANDOS '}'
+
+    3 COMANDOS: COMANDO COMANDOS
+    4         | %empty
+
+    5 COMANDO: E ';'
+    6        | OPERACAO_LOGICO ';'
+    7        | DECLARACAO ';'
+
+    8 DECLARACAO: TK_TIPO_FLOAT TK_ID TK_ATRIB E
+    9           | TK_TIPO_BOOL TK_ID TK_ATRIB E
+   10           | TK_TIPO_CHAR TK_ID TK_ATRIB E
+   11           | TK_TIPO_INT TK_ID TK_ATRIB E
+
+   12 E: ATRIBUICAO
+   13  | OPERACAO_ARITMETICA
+
+   14 OPERACAO_ARITMETICA: E TK_SOMA_ou_SUBTRACAO E
+   15                    | E TK_DIVISAO_ou_MULTIPLICACAO E
+   16                    | TK_NUM
+   17                    | '(' E ')'
+   18                    | TK_ID
+
+   19 OPERACAO_RELACIONAL: E TK_RELACIONAL E
+   20                    | OPERACAO_RELACIONAL TK_RELACIONAL TK_BOOL
+
+   21 OPERACAO_LOGICO: OPERACAO_LOGICO TK_LOGICO OPERACAO_LOGICO
+   22                | OPERACAO_RELACIONAL
+
+   23 ATRIBUICAO: TK_ID TK_ATRIB TK_BOOL
+   24           | TK_ID TK_ATRIB TK_CHAR
+   25           | TK_ID TK_ATRIB E
+   26           | TK_ID TK_ATRIB OPERACAO_LOGICO
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+'(' (40) 1 17
+')' (41) 1 17
+';' (59) 5 6 7
+'{' (123) 2
+'}' (125) 2
+error (256)
+TK_NUM (258) 16
+TK_CHAR (259) 24
+TK_ID (260) 8 9 10 11 18 23 24 25 26
+TK_BOOL (261) 20 23
+TK_MAIN (262) 1
+TK_TIPO_INT (263) 1 11
+TK_TIPO_BOOL (264) 9
+TK_TIPO_FLOAT (265) 8
+TK_TIPO_CHAR (266) 10
+TK_SOMA_ou_SUBTRACAO (267) 14
+TK_DIVISAO_ou_MULTIPLICACAO (268) 15
+TK_MENOR_QUE (269)
+TK_MAIOR_QUE (270)
+TK_IGUAL (271)
+TK_DIFERENTE (272)
+TK_MENOR_IGUAL (273)
+TK_LOGICO (274) 21
+TK_ATRIB (275) 8 9 10 11 23 24 25 26
+TK_CAST_DO_INT (276)
+TK_CAST_DO_FLOAT (277)
+TK_FIM (278)
+TK_ERROR (279)
+TK_RELACIONAL (280) 19 20
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (31)
+    à esquerda: 0
+S (32)
+    à esquerda: 1, à direita: 0
+BLOCO (33)
+    à esquerda: 2, à direita: 1
+COMANDOS (34)
+    à esquerda: 3 4, à direita: 2 3
+COMANDO (35)
+    à esquerda: 5 6 7, à direita: 3
+DECLARACAO (36)
+    à esquerda: 8 9 10 11, à direita: 7
+E (37)
+    à esquerda: 12 13, à direita: 5 8 9 10 11 14 15 17 19 25
+OPERACAO_ARITMETICA (38)
+    à esquerda: 14 15 16 17 18, à direita: 13
+OPERACAO_RELACIONAL (39)
+    à esquerda: 19 20, à direita: 20 22
+OPERACAO_LOGICO (40)
+    à esquerda: 21 22, à direita: 6 21 26
+ATRIBUICAO (41)
+    à esquerda: 23 24 25 26, à direita: 12
+
+
+Estado 0
+
+    0 $accept: . S $end
+
+    TK_TIPO_INT  deslocar, e ir ao estado 1
+
+    S  ir ao estado 2
+
+
+Estado 1
+
+    1 S: TK_TIPO_INT . TK_MAIN '(' ')' BLOCO
+
+    TK_MAIN  deslocar, e ir ao estado 3
+
+
+Estado 2
+
+    0 $accept: S . $end
+
+    $end  deslocar, e ir ao estado 4
+
+
+Estado 3
+
+    1 S: TK_TIPO_INT TK_MAIN . '(' ')' BLOCO
+
+    '('  deslocar, e ir ao estado 5
+
+
+Estado 4
+
+    0 $accept: S $end .
+
+    $padrão  aceitar
+
+
+Estado 5
+
+    1 S: TK_TIPO_INT TK_MAIN '(' . ')' BLOCO
+
+    ')'  deslocar, e ir ao estado 6
+
+
+Estado 6
+
+    1 S: TK_TIPO_INT TK_MAIN '(' ')' . BLOCO
+
+    '{'  deslocar, e ir ao estado 7
+
+    BLOCO  ir ao estado 8
+
+
+Estado 7
+
+    2 BLOCO: '{' . COMANDOS '}'
+
+    TK_NUM         deslocar, e ir ao estado 9
+    TK_ID          deslocar, e ir ao estado 10
+    TK_TIPO_INT    deslocar, e ir ao estado 11
+    TK_TIPO_BOOL   deslocar, e ir ao estado 12
+    TK_TIPO_FLOAT  deslocar, e ir ao estado 13
+    TK_TIPO_CHAR   deslocar, e ir ao estado 14
+    '('            deslocar, e ir ao estado 15
+
+    $padrão  reduzir usando a regra 4 (COMANDOS)
+
+    COMANDOS             ir ao estado 16
+    COMANDO              ir ao estado 17
+    DECLARACAO           ir ao estado 18
+    E                    ir ao estado 19
+    OPERACAO_ARITMETICA  ir ao estado 20
+    OPERACAO_RELACIONAL  ir ao estado 21
+    OPERACAO_LOGICO      ir ao estado 22
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 8
+
+    1 S: TK_TIPO_INT TK_MAIN '(' ')' BLOCO .
+
+    $padrão  reduzir usando a regra 1 (S)
+
+
+Estado 9
+
+   16 OPERACAO_ARITMETICA: TK_NUM .
+
+    $padrão  reduzir usando a regra 16 (OPERACAO_ARITMETICA)
+
+
+Estado 10
+
+   18 OPERACAO_ARITMETICA: TK_ID .
+   23 ATRIBUICAO: TK_ID . TK_ATRIB TK_BOOL
+   24           | TK_ID . TK_ATRIB TK_CHAR
+   25           | TK_ID . TK_ATRIB E
+   26           | TK_ID . TK_ATRIB OPERACAO_LOGICO
+
+    TK_ATRIB  deslocar, e ir ao estado 24
+
+    $padrão  reduzir usando a regra 18 (OPERACAO_ARITMETICA)
+
+
+Estado 11
+
+   11 DECLARACAO: TK_TIPO_INT . TK_ID TK_ATRIB E
+
+    TK_ID  deslocar, e ir ao estado 25
+
+
+Estado 12
+
+    9 DECLARACAO: TK_TIPO_BOOL . TK_ID TK_ATRIB E
+
+    TK_ID  deslocar, e ir ao estado 26
+
+
+Estado 13
+
+    8 DECLARACAO: TK_TIPO_FLOAT . TK_ID TK_ATRIB E
+
+    TK_ID  deslocar, e ir ao estado 27
+
+
+Estado 14
+
+   10 DECLARACAO: TK_TIPO_CHAR . TK_ID TK_ATRIB E
+
+    TK_ID  deslocar, e ir ao estado 28
+
+
+Estado 15
+
+   17 OPERACAO_ARITMETICA: '(' . E ')'
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 29
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 16
+
+    2 BLOCO: '{' COMANDOS . '}'
+
+    '}'  deslocar, e ir ao estado 30
+
+
+Estado 17
+
+    3 COMANDOS: COMANDO . COMANDOS
+
+    TK_NUM         deslocar, e ir ao estado 9
+    TK_ID          deslocar, e ir ao estado 10
+    TK_TIPO_INT    deslocar, e ir ao estado 11
+    TK_TIPO_BOOL   deslocar, e ir ao estado 12
+    TK_TIPO_FLOAT  deslocar, e ir ao estado 13
+    TK_TIPO_CHAR   deslocar, e ir ao estado 14
+    '('            deslocar, e ir ao estado 15
+
+    $padrão  reduzir usando a regra 4 (COMANDOS)
+
+    COMANDOS             ir ao estado 31
+    COMANDO              ir ao estado 17
+    DECLARACAO           ir ao estado 18
+    E                    ir ao estado 19
+    OPERACAO_ARITMETICA  ir ao estado 20
+    OPERACAO_RELACIONAL  ir ao estado 21
+    OPERACAO_LOGICO      ir ao estado 22
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 18
+
+    7 COMANDO: DECLARACAO . ';'
+
+    ';'  deslocar, e ir ao estado 32
+
+
+Estado 19
+
+    5 COMANDO: E . ';'
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   19 OPERACAO_RELACIONAL: E . TK_RELACIONAL E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+    TK_RELACIONAL                deslocar, e ir ao estado 35
+    ';'                          deslocar, e ir ao estado 36
+
+
+Estado 20
+
+   13 E: OPERACAO_ARITMETICA .
+
+    $padrão  reduzir usando a regra 13 (E)
+
+
+Estado 21
+
+   20 OPERACAO_RELACIONAL: OPERACAO_RELACIONAL . TK_RELACIONAL TK_BOOL
+   22 OPERACAO_LOGICO: OPERACAO_RELACIONAL .
+
+    TK_RELACIONAL  deslocar, e ir ao estado 37
+
+    TK_RELACIONAL  [reduzir usando a regra 22 (OPERACAO_LOGICO)]
+    $padrão       reduzir usando a regra 22 (OPERACAO_LOGICO)
+
+
+Estado 22
+
+    6 COMANDO: OPERACAO_LOGICO . ';'
+   21 OPERACAO_LOGICO: OPERACAO_LOGICO . TK_LOGICO OPERACAO_LOGICO
+
+    TK_LOGICO  deslocar, e ir ao estado 38
+    ';'        deslocar, e ir ao estado 39
+
+
+Estado 23
+
+   12 E: ATRIBUICAO .
+
+    $padrão  reduzir usando a regra 12 (E)
+
+
+Estado 24
+
+   23 ATRIBUICAO: TK_ID TK_ATRIB . TK_BOOL
+   24           | TK_ID TK_ATRIB . TK_CHAR
+   25           | TK_ID TK_ATRIB . E
+   26           | TK_ID TK_ATRIB . OPERACAO_LOGICO
+
+    TK_NUM   deslocar, e ir ao estado 9
+    TK_CHAR  deslocar, e ir ao estado 40
+    TK_ID    deslocar, e ir ao estado 10
+    TK_BOOL  deslocar, e ir ao estado 41
+    '('      deslocar, e ir ao estado 15
+
+    E                    ir ao estado 42
+    OPERACAO_ARITMETICA  ir ao estado 20
+    OPERACAO_RELACIONAL  ir ao estado 21
+    OPERACAO_LOGICO      ir ao estado 43
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 25
+
+   11 DECLARACAO: TK_TIPO_INT TK_ID . TK_ATRIB E
+
+    TK_ATRIB  deslocar, e ir ao estado 44
+
+
+Estado 26
+
+    9 DECLARACAO: TK_TIPO_BOOL TK_ID . TK_ATRIB E
+
+    TK_ATRIB  deslocar, e ir ao estado 45
+
+
+Estado 27
+
+    8 DECLARACAO: TK_TIPO_FLOAT TK_ID . TK_ATRIB E
+
+    TK_ATRIB  deslocar, e ir ao estado 46
+
+
+Estado 28
+
+   10 DECLARACAO: TK_TIPO_CHAR TK_ID . TK_ATRIB E
+
+    TK_ATRIB  deslocar, e ir ao estado 47
+
+
+Estado 29
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   17                    | '(' E . ')'
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+    ')'                          deslocar, e ir ao estado 48
+
+
+Estado 30
+
+    2 BLOCO: '{' COMANDOS '}' .
+
+    $padrão  reduzir usando a regra 2 (BLOCO)
+
+
+Estado 31
+
+    3 COMANDOS: COMANDO COMANDOS .
+
+    $padrão  reduzir usando a regra 3 (COMANDOS)
+
+
+Estado 32
+
+    7 COMANDO: DECLARACAO ';' .
+
+    $padrão  reduzir usando a regra 7 (COMANDO)
+
+
+Estado 33
+
+   14 OPERACAO_ARITMETICA: E TK_SOMA_ou_SUBTRACAO . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 49
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 34
+
+   15 OPERACAO_ARITMETICA: E TK_DIVISAO_ou_MULTIPLICACAO . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 50
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 35
+
+   19 OPERACAO_RELACIONAL: E TK_RELACIONAL . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 51
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 36
+
+    5 COMANDO: E ';' .
+
+    $padrão  reduzir usando a regra 5 (COMANDO)
+
+
+Estado 37
+
+   20 OPERACAO_RELACIONAL: OPERACAO_RELACIONAL TK_RELACIONAL . TK_BOOL
+
+    TK_BOOL  deslocar, e ir ao estado 52
+
+
+Estado 38
+
+   21 OPERACAO_LOGICO: OPERACAO_LOGICO TK_LOGICO . OPERACAO_LOGICO
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 53
+    OPERACAO_ARITMETICA  ir ao estado 20
+    OPERACAO_RELACIONAL  ir ao estado 21
+    OPERACAO_LOGICO      ir ao estado 54
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 39
+
+    6 COMANDO: OPERACAO_LOGICO ';' .
+
+    $padrão  reduzir usando a regra 6 (COMANDO)
+
+
+Estado 40
+
+   24 ATRIBUICAO: TK_ID TK_ATRIB TK_CHAR .
+
+    $padrão  reduzir usando a regra 24 (ATRIBUICAO)
+
+
+Estado 41
+
+   23 ATRIBUICAO: TK_ID TK_ATRIB TK_BOOL .
+
+    $padrão  reduzir usando a regra 23 (ATRIBUICAO)
+
+
+Estado 42
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   19 OPERACAO_RELACIONAL: E . TK_RELACIONAL E
+   25 ATRIBUICAO: TK_ID TK_ATRIB E .
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+    TK_RELACIONAL                deslocar, e ir ao estado 35
+
+    TK_SOMA_ou_SUBTRACAO         [reduzir usando a regra 25 (ATRIBUICAO)]
+    TK_DIVISAO_ou_MULTIPLICACAO  [reduzir usando a regra 25 (ATRIBUICAO)]
+    TK_RELACIONAL                [reduzir usando a regra 25 (ATRIBUICAO)]
+    $padrão                     reduzir usando a regra 25 (ATRIBUICAO)
+
+
+Estado 43
+
+   21 OPERACAO_LOGICO: OPERACAO_LOGICO . TK_LOGICO OPERACAO_LOGICO
+   26 ATRIBUICAO: TK_ID TK_ATRIB OPERACAO_LOGICO .
+
+    TK_LOGICO  deslocar, e ir ao estado 38
+
+    TK_LOGICO  [reduzir usando a regra 26 (ATRIBUICAO)]
+    $padrão   reduzir usando a regra 26 (ATRIBUICAO)
+
+
+Estado 44
+
+   11 DECLARACAO: TK_TIPO_INT TK_ID TK_ATRIB . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 55
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 45
+
+    9 DECLARACAO: TK_TIPO_BOOL TK_ID TK_ATRIB . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 56
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 46
+
+    8 DECLARACAO: TK_TIPO_FLOAT TK_ID TK_ATRIB . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 57
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 47
+
+   10 DECLARACAO: TK_TIPO_CHAR TK_ID TK_ATRIB . E
+
+    TK_NUM  deslocar, e ir ao estado 9
+    TK_ID   deslocar, e ir ao estado 10
+    '('     deslocar, e ir ao estado 15
+
+    E                    ir ao estado 58
+    OPERACAO_ARITMETICA  ir ao estado 20
+    ATRIBUICAO           ir ao estado 23
+
+
+Estado 48
+
+   17 OPERACAO_ARITMETICA: '(' E ')' .
+
+    $padrão  reduzir usando a regra 17 (OPERACAO_ARITMETICA)
+
+
+Estado 49
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   14                    | E TK_SOMA_ou_SUBTRACAO E .
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 14 (OPERACAO_ARITMETICA)
+
+
+Estado 50
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   15                    | E TK_DIVISAO_ou_MULTIPLICACAO E .
+
+    $padrão  reduzir usando a regra 15 (OPERACAO_ARITMETICA)
+
+
+Estado 51
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   19 OPERACAO_RELACIONAL: E TK_RELACIONAL E .
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 19 (OPERACAO_RELACIONAL)
+
+
+Estado 52
+
+   20 OPERACAO_RELACIONAL: OPERACAO_RELACIONAL TK_RELACIONAL TK_BOOL .
+
+    $padrão  reduzir usando a regra 20 (OPERACAO_RELACIONAL)
+
+
+Estado 53
+
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+   19 OPERACAO_RELACIONAL: E . TK_RELACIONAL E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+    TK_RELACIONAL                deslocar, e ir ao estado 35
+
+
+Estado 54
+
+   21 OPERACAO_LOGICO: OPERACAO_LOGICO . TK_LOGICO OPERACAO_LOGICO
+   21                | OPERACAO_LOGICO TK_LOGICO OPERACAO_LOGICO .
+
+    $padrão  reduzir usando a regra 21 (OPERACAO_LOGICO)
+
+
+Estado 55
+
+   11 DECLARACAO: TK_TIPO_INT TK_ID TK_ATRIB E .
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 11 (DECLARACAO)
+
+
+Estado 56
+
+    9 DECLARACAO: TK_TIPO_BOOL TK_ID TK_ATRIB E .
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 9 (DECLARACAO)
+
+
+Estado 57
+
+    8 DECLARACAO: TK_TIPO_FLOAT TK_ID TK_ATRIB E .
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 8 (DECLARACAO)
+
+
+Estado 58
+
+   10 DECLARACAO: TK_TIPO_CHAR TK_ID TK_ATRIB E .
+   14 OPERACAO_ARITMETICA: E . TK_SOMA_ou_SUBTRACAO E
+   15                    | E . TK_DIVISAO_ou_MULTIPLICACAO E
+
+    TK_SOMA_ou_SUBTRACAO         deslocar, e ir ao estado 33
+    TK_DIVISAO_ou_MULTIPLICACAO  deslocar, e ir ao estado 34
+
+    $padrão  reduzir usando a regra 10 (DECLARACAO)
